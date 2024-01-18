@@ -6,10 +6,15 @@ import './Group.css';
 interface GroupProps extends IGroup {
     onDeleteGroup: (groupId: number | string) => void;
     onUpdateSubGroups: (groupId: number | string) => void;
+    onDeleteSubGroup: (groupId: number | string, subGroupId: number | string) => void;
 
 }
 
-const GroupComponent: FC<GroupProps> = ({ id, sum, subGroups, onDeleteGroup, onUpdateSubGroups }) => {
+const GroupComponent: FC<GroupProps> = ({ id, sum, subGroups, onDeleteGroup, onUpdateSubGroups, onDeleteSubGroup }) => {
+
+    const handleOnClickDeleteSubGroup = (subGroupId: number | string) => {
+        onDeleteSubGroup(id, subGroupId)
+    }
 
     return (
         <div className='group'>
@@ -20,7 +25,11 @@ const GroupComponent: FC<GroupProps> = ({ id, sum, subGroups, onDeleteGroup, onU
                 <button onClick={() => onDeleteGroup(id)}>delete</button>
             </div>
             {(subGroups || []).map((subgroup) => (
-                <Subgroup key={subgroup.id} {...subgroup} />
+                <Subgroup
+                    onDeleteSubGroup={handleOnClickDeleteSubGroup}
+                    key={subgroup.id}
+                    {...subgroup}
+                />
             ))}
             <button onClick={() => onUpdateSubGroups(id)}>Добавить подгруппу</button>
         </div>

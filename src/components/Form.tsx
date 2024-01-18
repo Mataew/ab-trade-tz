@@ -80,17 +80,33 @@ const Form = () => {
             })
 
             return { ...prevState, groups: updatedGroups }
-        })
+        });
     }
 
-    const handleDeleteSubGroup = () => {
+    const handleDeleteSubGroup = (groupId: number | string, subGroupId: number | string) => {
+        setFormData(prevState => {
+            const updatedGroups = prevState.groups.map(group => {
+                if (group.id === groupId) {
+                    const updatedSubGroups = group.subGroups.filter(subGroup => subGroupId !== subGroup.id)
 
+                    return { ...group, subGroups: updatedSubGroups}
+                }
+                return group
+            })
+            return { ...prevState, groups: updatedGroups }
+        });
     }
 
     return (
         <div>
             {(formData.groups || []).map((group) => (
-                <Group key={group.id} onUpdateSubGroups={handleUpdateSubGroups} onDeleteGroup={handleDeleteGroup} {...group} />
+                <Group
+                    key={group.id}
+                    onDeleteGroup={handleDeleteGroup}
+                    onUpdateSubGroups={handleUpdateSubGroups}
+                    onDeleteSubGroup={handleDeleteSubGroup}
+                    {...group}
+                />
             ))}
             <button onClick={() => handleUpdateGroups()}>Добавить группу</button>
         </div>
