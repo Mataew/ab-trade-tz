@@ -4,8 +4,11 @@ import Product from "../Product/Product";
 import {ISubGroup} from "../../interfaces/interfaces";
 import './Subgroup.css';
 
+interface SubgroupProps extends ISubGroup {
 
-const Subgroup: React.FC<ISubGroup> = ({ id, sum, products }) => {
+}
+
+const Subgroup: React.FC<SubgroupProps> = ({ id, sum, products }) => {
     return (
         <div className='subgroup'>
             <h4>Подгруппа {id}</h4>

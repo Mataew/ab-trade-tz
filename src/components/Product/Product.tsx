@@ -2,7 +2,11 @@
 import React from 'react';
 import {IProduct} from "../../interfaces/interfaces";
 
-const ProductComponent: React.FC<IProduct> = ({ id, name, sum, count, price }) => {
+interface ProductProps extends IProduct {
+}
+
+const ProductComponent: React.FC<ProductProps> = ({ id, name, sum, count, price }) => {
+
     return (
         <div className='product'>
             <ul>

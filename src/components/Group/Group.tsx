@@ -1,13 +1,15 @@
 import Subgroup from "../Subgroup/Subgroup";
 import {IGroup} from "../../interfaces/interfaces";
-import {FC} from "react";
+import React, {FC} from "react";
 import './Group.css';
 
-const GroupComponent: FC<IGroup> = ({ id, sum, subGroups }, setFormData: () => void) => {
+interface GroupProps extends IGroup {
+    onDeleteGroup: (groupId: number | string) => void;
+    onUpdateSubGroups: (groupId: number | string) => void;
 
-    const reCalculateGroupSum = () => {
-        const total = subGroups.reduce((sum, group) => sum + group.sum, 0);
-    }
+}
+
+const GroupComponent: FC<GroupProps> = ({ id, sum, subGroups, onDeleteGroup, onUpdateSubGroups }) => {
 
     return (
         <div className='group'>
@@ -15,10 +17,12 @@ const GroupComponent: FC<IGroup> = ({ id, sum, subGroups }, setFormData: () => v
             <div>
                 <h3>Сумма группы</h3>
                 <input value={sum}/>
+                <button onClick={() => onDeleteGroup(id)}>delete</button>
             </div>
-            {subGroups.map((subgroup) => (
+            {(subGroups || []).map((subgroup) => (
                 <Subgroup key={subgroup.id} {...subgroup} />
             ))}
+            <button onClick={() => onUpdateSubGroups(id)}>Добавить подгруппу</button>
         </div>
     );
 };
