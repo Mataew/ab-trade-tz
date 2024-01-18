@@ -7,14 +7,31 @@ interface GroupProps extends IGroup {
     onDeleteGroup: (groupId: number | string) => void;
     onUpdateSubGroups: (groupId: number | string) => void;
     onDeleteSubGroup: (groupId: number | string, subGroupId: number | string) => void;
+    onUpdateProducts: (groupId: number | string, subGroupId: number | string) => void;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 
 }
 
-const GroupComponent: FC<GroupProps> = ({ id, sum, subGroups, onDeleteGroup, onUpdateSubGroups, onDeleteSubGroup }) => {
+const GroupComponent: FC<GroupProps> = ({
+    id,
+    sum,
+    subGroups,
+    onDeleteGroup,
+    onUpdateSubGroups,
+    onDeleteSubGroup,
+    onUpdateProducts,
+    onChange
+}) => {
 
-    const handleOnClickDeleteSubGroup = (subGroupId: number | string) => {
-        onDeleteSubGroup(id, subGroupId)
+    const onDeleteSubGroupClick = (subGroupId: number | string) => {
+        onDeleteSubGroup(id, subGroupId);
     }
+
+    const onUpdateProductsClick = (subGroupId: number | string) => {
+        onUpdateProducts(id, subGroupId);
+    }
+
+
 
     return (
         <div className='group'>
@@ -26,8 +43,10 @@ const GroupComponent: FC<GroupProps> = ({ id, sum, subGroups, onDeleteGroup, onU
             </div>
             {(subGroups || []).map((subgroup) => (
                 <Subgroup
-                    onDeleteSubGroup={handleOnClickDeleteSubGroup}
+                    onDeleteSubGroupClick={onDeleteSubGroupClick}
+                    onUpdateProductsClick={onUpdateProductsClick}
                     key={subgroup.id}
+                    onChange={onChange}
                     {...subgroup}
                 />
             ))}

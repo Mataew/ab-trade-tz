@@ -1,47 +1,17 @@
-// FormComponent.tsx
 import React, {useState} from 'react';
 import Group from "./Group/Group";
-import {IForm} from "../interfaces/interfaces";
-import group from "./Group/Group";
-import subgroup from "./Subgroup/Subgroup";
-import product from "./Product/Product";
-//
-// const initialData = {
-//     sum: 0,
-//     groups: [
-//         {
-//             id: 1,
-//             sum: 8,
-//             subGroups: [
-//                 {
-//                     id: 12,
-//                     sum: 4,
-//                     products: [
-//                         { id: 111, name: 'Product X', sum: 10, count: 2, price: 14 },
-//                     ],
-//                 },
-//                 {
-//                     id: 11,
-//                     sum: 4,
-//                     products: [
-//                         { id: 111, name: 'Product X', sum: 10, count: 2, price: 14 },
-//                     ],
-//                 },
-//             ],
-//         },
-//     ]
-// };
-
+import {IForm, IGroup, IProduct, ISubGroup} from "../interfaces/interfaces";
 
 const Form = () => {
 
     const [formData, setFormData] = useState<IForm>({ sum: 0, groups: []});
+    const [newObj, setNewObj] = useState({})
 
 
     // Функионал кнопок группы
     const handleUpdateGroups = () => { // функция добавления группы
         setFormData(prevState => {
-            const newGroup = {
+            const newGroup: IGroup = {
                 sum: 0,
                 id: Math.floor((Math.random() * 100) + 1),
                 subGroups: []
@@ -67,7 +37,7 @@ const Form = () => {
         setFormData(prevState => {
             const updatedGroups = prevState.groups.map(group => {
                 if (group.id === groupId) {
-                    const newSubGroup = {
+                    const newSubGroup: ISubGroup = {
                         sum: 0,
                         id: Math.floor((Math.random() * 100) + 1),
                         products: []
@@ -97,6 +67,49 @@ const Form = () => {
         });
     }
 
+    const handleUpdateProducts = (groupId: number | string, subGroupId: number | string) => {
+        setFormData(prevState => {
+            const updatedGroups = prevState.groups.map(group => {
+                if (group.id === groupId) {
+
+                    const updatedSubGroups = group.subGroups.map(subGroup => {
+                        if (subGroup.id === subGroupId) {
+                            const newProduct: IProduct = {
+                                id: Math.floor((Math.random() * 100) + 1),
+                                name: 'hz',
+                                sum: 5,
+                                count: 5,
+                                price: Math.floor((Math.random() * 100) + 1)
+                            }
+
+                            const updatedProducts = [...subGroup.products, newProduct]
+
+                            return { ...subGroup, products: updatedProducts}
+                        }
+                        return subGroup
+                    })
+
+                    return { ...group, subGroups: updatedSubGroups}
+                }
+                return group
+            })
+
+            return { ...prevState, groups: updatedGroups }
+        });
+    }
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+
+        setNewObj(p => ({
+            ...p,
+            [name]: value
+        }))
+
+    }
+
+    console.log(newObj)
+
     return (
         <div>
             {(formData.groups || []).map((group) => (
@@ -105,6 +118,8 @@ const Form = () => {
                     onDeleteGroup={handleDeleteGroup}
                     onUpdateSubGroups={handleUpdateSubGroups}
                     onDeleteSubGroup={handleDeleteSubGroup}
+                    onUpdateProducts={handleUpdateProducts}
+                    onChange={handleChange}
                     {...group}
                 />
             ))}

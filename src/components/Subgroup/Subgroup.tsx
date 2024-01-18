@@ -1,14 +1,15 @@
-// SubgroupComponent.tsx
 import React from 'react';
 import Product from "../Product/Product";
 import {ISubGroup} from "../../interfaces/interfaces";
 import './Subgroup.css';
 
 interface SubgroupProps extends ISubGroup {
-    onDeleteSubGroup: (subGroupId: number | string) => void;
+    onDeleteSubGroupClick: (subGroupId: number | string) => void;
+    onUpdateProductsClick: (subGroupId: number | string) => void;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Subgroup: React.FC<SubgroupProps> = ({ id, sum, products, onDeleteSubGroup }) => {
+const Subgroup: React.FC<SubgroupProps> = ({ id, sum, products, onDeleteSubGroupClick, onChange, onUpdateProductsClick }) => {
     return (
         <div className='subgroup'>
             <h4>Подгруппа {id}</h4>
@@ -16,10 +17,15 @@ const Subgroup: React.FC<SubgroupProps> = ({ id, sum, products, onDeleteSubGroup
                 <h4>Сумма подгруппы</h4>
                 <input value={sum}/>
             </div>
+            <button style={{border: '1px solid red', background: 'red', color: 'white'}} onClick={() => onDeleteSubGroupClick(id)}>Удалить подгруппу</button>
             {products.map((product) => (
-                <Product key={product.id} {...product} />
+                <Product
+                    key={product.id}
+                    onChange={onChange}
+                    {...product}
+                />
             ))}
-            <button style={{border: '1px solid red', background: 'red', color: 'white'}} onClick={() => onDeleteSubGroup(id)}>Удалить подгруппу</button>
+            <button onClick={() => onUpdateProductsClick(id)}>Добавть продукт</button>
         </div>
     );
 };
