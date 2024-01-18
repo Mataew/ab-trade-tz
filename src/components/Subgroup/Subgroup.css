@@ -1,0 +1,10 @@
+.subgroup {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.subgroup ul{
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+}
