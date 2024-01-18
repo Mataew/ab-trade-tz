@@ -5,8 +5,6 @@ import {IForm, IGroup, IProduct, ISubGroup} from "../interfaces/interfaces";
 const Form = () => {
 
     const [formData, setFormData] = useState<IForm>({ sum: 0, groups: []});
-    const [newObj, setNewObj] = useState({})
-
 
     // Функионал кнопок группы
     const handleUpdateGroups = () => { // функция добавления группы
@@ -67,6 +65,7 @@ const Form = () => {
         });
     }
 
+    // функционал продуктов
     const handleUpdateProducts = (groupId: number | string, subGroupId: number | string) => {
         setFormData(prevState => {
             const updatedGroups = prevState.groups.map(group => {
@@ -98,17 +97,29 @@ const Form = () => {
         });
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+    const handleDeleteProduct = (groupId: number | string, subGroupId: number | string, productId: number | string) => {
+        setFormData(prevState => {
+            const updatedGroups = prevState.groups.map(group => {
+                if (group.id === groupId) {
 
-        setNewObj(p => ({
-            ...p,
-            [name]: value
-        }))
+                    const updatedSubGroups = group.subGroups.map(subGroup => {
+                        if (subGroup.id === subGroupId) {
 
+                            const updatedProducts = subGroup.products.filter(product => product.id !== productId)
+
+                            return { ...subGroup, products: updatedProducts}
+                        }
+                        return subGroup
+                    })
+
+                    return { ...group, subGroups: updatedSubGroups}
+                }
+                return group
+            })
+
+            return { ...prevState, groups: updatedGroups }
+        });
     }
-
-    console.log(newObj)
 
     return (
         <div>
@@ -119,7 +130,7 @@ const Form = () => {
                     onUpdateSubGroups={handleUpdateSubGroups}
                     onDeleteSubGroup={handleDeleteSubGroup}
                     onUpdateProducts={handleUpdateProducts}
-                    onChange={handleChange}
+                    onDeleteProduct={handleDeleteProduct}
                     {...group}
                 />
             ))}

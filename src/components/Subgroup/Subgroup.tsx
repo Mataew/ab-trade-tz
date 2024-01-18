@@ -4,12 +4,21 @@ import {ISubGroup} from "../../interfaces/interfaces";
 import './Subgroup.css';
 
 interface SubgroupProps extends ISubGroup {
-    onDeleteSubGroupClick: (subGroupId: number | string) => void;
-    onUpdateProductsClick: (subGroupId: number | string) => void;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onDeleteSubGroup: (groupId: number | string, subGroupId: number | string) => void;
+    onUpdateProducts: (groupId: number | string, subGroupId: number | string) => void;
+    onDeleteProduct: (groupId: number | string, subGroupId: number | string, productId: number | string) => void;
+    groupId: number | string;
 }
 
-const Subgroup: React.FC<SubgroupProps> = ({ id, sum, products, onDeleteSubGroupClick, onChange, onUpdateProductsClick }) => {
+const Subgroup: React.FC<SubgroupProps> = ({
+    id,
+    sum,
+    products,
+    groupId,
+    onDeleteSubGroup,
+    onUpdateProducts,
+    onDeleteProduct
+}) => {
     return (
         <div className='subgroup'>
             <h4>Подгруппа {id}</h4>
@@ -17,15 +26,17 @@ const Subgroup: React.FC<SubgroupProps> = ({ id, sum, products, onDeleteSubGroup
                 <h4>Сумма подгруппы</h4>
                 <input value={sum}/>
             </div>
-            <button style={{border: '1px solid red', background: 'red', color: 'white'}} onClick={() => onDeleteSubGroupClick(id)}>Удалить подгруппу</button>
+            <button style={{border: '1px solid red', background: 'red', color: 'white'}} onClick={() => onDeleteSubGroup(groupId, id)}>Удалить подгруппу</button>
             {products.map((product) => (
                 <Product
                     key={product.id}
-                    onChange={onChange}
+                    groupId={groupId}
+                    subGroupId={id}
+                    onDeleteProduct={onDeleteProduct}
                     {...product}
                 />
             ))}
-            <button onClick={() => onUpdateProductsClick(id)}>Добавть продукт</button>
+            <button onClick={() => onUpdateProducts(groupId, id)}>Добавть продукт</button>
         </div>
     );
 };
