@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Group from "./Group/Group";
 import {IForm, IGroup, IProduct, ISubGroup} from "../interfaces/interfaces";
+import subgroup from "./Subgroup/Subgroup";
 
 const Form = () => {
 
-    const [formData, setFormData] = useState<IForm>({ sum: 0, groups: []});
+    const localData = JSON.parse(localStorage.getItem('formDataInLocal') || '')
+
+    const [formData, setFormData] = useState<IForm>(localData || { sum: 0, groups: []});
 
     // Функионал кнопок группы
     const handleUpdateGroups = () => { // функция добавления группы
@@ -75,10 +78,10 @@ const Form = () => {
                         if (subGroup.id === subGroupId) {
                             const newProduct: IProduct = {
                                 id: Math.floor((Math.random() * 100) + 1),
-                                name: 'hz',
-                                sum: 5,
-                                count: 5,
-                                price: Math.floor((Math.random() * 100) + 1)
+                                name: 'Продукт ',
+                                sum: 0,
+                                count: 0,
+                                price: 0
                             }
 
                             const updatedProducts = [...subGroup.products, newProduct]
@@ -121,16 +124,63 @@ const Form = () => {
         });
     }
 
+
+    const handleChange = (groupId: number | string, subGroupId: number | string, productId: number | string, name: string, newValue: number | string) => {
+        setFormData((prevState) => {
+
+            const updatedGroups = prevState.groups.map(group => {
+                if (group.id === groupId) {
+
+                    const updatedSubGroups = group.subGroups.map(subGroup => {
+
+                        if (subGroup.id === subGroupId) {
+
+                            const updatedProducts = subGroup.products.map(product => {
+                                if (product.id === productId) {
+                                    return {
+                                        ...product,
+                                        [name]: newValue
+                                    }
+                                }
+
+                                return product
+                            })
+
+                            return { ...subGroup, products: updatedProducts}
+                        }
+
+                        return subGroup
+                    })
+
+                    return { ...group, subGroups: updatedSubGroups}
+                }
+
+                return group
+            })
+
+            return {
+                ...prevState,
+                groups: updatedGroups,
+            };
+        });
+    }
+
+    useEffect(() => {
+        localStorage.setItem('formDataInLocal', JSON.stringify(formData));
+    }, [formData])
+
     return (
         <div>
-            {(formData.groups || []).map((group) => (
+            {(formData.groups || []).map((group, index) => (
                 <Group
                     key={group.id}
+                    groupNumber={index + 1}
                     onDeleteGroup={handleDeleteGroup}
                     onUpdateSubGroups={handleUpdateSubGroups}
                     onDeleteSubGroup={handleDeleteSubGroup}
                     onUpdateProducts={handleUpdateProducts}
                     onDeleteProduct={handleDeleteProduct}
+                    onChange={handleChange}
                     {...group}
                 />
             ))}

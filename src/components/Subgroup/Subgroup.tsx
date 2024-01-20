@@ -4,10 +4,13 @@ import {ISubGroup} from "../../interfaces/interfaces";
 import './Subgroup.css';
 
 interface SubgroupProps extends ISubGroup {
+    groupId: number | string;
+    subGroupNumber: number;
     onDeleteSubGroup: (groupId: number | string, subGroupId: number | string) => void;
     onUpdateProducts: (groupId: number | string, subGroupId: number | string) => void;
     onDeleteProduct: (groupId: number | string, subGroupId: number | string, productId: number | string) => void;
-    groupId: number | string;
+    onChange: (groupId: number | string, subGroupId: number | string, productId: number | string, name: string, newValue: number | string) => void;
+
 }
 
 const Subgroup: React.FC<SubgroupProps> = ({
@@ -15,24 +18,28 @@ const Subgroup: React.FC<SubgroupProps> = ({
     sum,
     products,
     groupId,
+    subGroupNumber,
     onDeleteSubGroup,
     onUpdateProducts,
-    onDeleteProduct
+    onDeleteProduct,
+    onChange
 }) => {
     return (
         <div className='subgroup'>
-            <h4>Подгруппа {id}</h4>
+            <h4>Подгруппа {subGroupNumber}</h4>
             <div>
                 <h4>Сумма подгруппы</h4>
                 <input value={sum}/>
             </div>
             <button style={{border: '1px solid red', background: 'red', color: 'white'}} onClick={() => onDeleteSubGroup(groupId, id)}>Удалить подгруппу</button>
-            {products.map((product) => (
+            {products.map((product, index) => (
                 <Product
                     key={product.id}
                     groupId={groupId}
                     subGroupId={id}
+                    productNumber={index + 1}
                     onDeleteProduct={onDeleteProduct}
+                    onChange={onChange}
                     {...product}
                 />
             ))}
