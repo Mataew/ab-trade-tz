@@ -1,10 +1,8 @@
-// App.tsx
-import React from 'react';
 import Form from "../components/Form";
-import './Global.css'
+import './Global.css';
+import {FC} from "react";
 
-const App: React.FC = () => {
-
+const App: FC = () => {
     return (
         <div className='App'>
             <h1>Форма</h1>

@@ -1,0 +1,33 @@
+.button_add{
+    width: 15%;
+    border: 1px solid rgb(179 223 228);
+    padding: 5px;
+    color: rgb(179 223 228);
+    margin-top: 5px;
+
+    background-color: inherit;
+    outline: none;
+
+    &:hover {
+        background-color: rgb(179 223 228);
+        color: white;
+        transition: 0.5s;
+    }
+}
+
+.button_delete {
+    font-size: 14px;
+    width: 15%;
+    padding: 5px;
+    background-color: rgb(253 225 229);
+    color: rgb(251 143 142);
+    margin-top: 5px;
+
+    outline: none;
+    border: none;
+
+    &:hover {
+        background-color: rgb(225, 0, 0);
+        transition: 5ms;
+    }
+}

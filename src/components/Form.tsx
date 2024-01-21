@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import Group from "./Group/Group";
 import {IForm, IGroup, IProduct, ISubGroup} from "../interfaces/interfaces";
-import subgroup from "./Subgroup/Subgroup";
+import Button, {ThemeButton} from "../Shared/Button/Button";
 
 const Form = () => {
 
-    const localData = JSON.parse(localStorage.getItem('formDataInLocal') || '')
-
-    const [formData, setFormData] = useState<IForm>(localData || { sum: 0, groups: []});
+    const formDataInLocal = JSON.parse(localStorage.getItem('formDataInLocal') || '')
+    const [formData, setFormData] = useState<IForm>(formDataInLocal || { sum: 0, groups: []});
 
     // Функионал кнопок группы
     const handleUpdateGroups = () => { // функция добавления группы
@@ -73,12 +72,12 @@ const Form = () => {
         setFormData(prevState => {
             const updatedGroups = prevState.groups.map(group => {
                 if (group.id === groupId) {
-
                     const updatedSubGroups = group.subGroups.map(subGroup => {
                         if (subGroup.id === subGroupId) {
+
                             const newProduct: IProduct = {
                                 id: Math.floor((Math.random() * 100) + 1),
-                                name: 'Продукт ',
+                                name: `Продукт ${subGroup.products.length + 1}`,
                                 sum: 0,
                                 count: 0,
                                 price: 0
@@ -166,6 +165,34 @@ const Form = () => {
     }
 
     useEffect(() => {
+        setFormData((prevState) => {
+
+            const updatedGroups = prevState.groups.map(group => {
+
+                const updatedSubgroups = group.subGroups.map(subgroup => {
+
+                    const updatedProduct = subgroup.products.map(product => {
+                        return { ...product, sum: product.price * product.count }
+                    })
+
+                    const subgroupSum = updatedProduct.reduce((a,b) => a + b.sum, 0)
+
+                    return { ...subgroup, sum: subgroupSum}
+                })
+
+                const groupsSum = updatedSubgroups.reduce((a,b) => a + b.sum, 0)
+
+                return { ...group, sum: groupsSum}
+            })
+
+            return {
+                ...prevState,
+                groups: updatedGroups,
+            };
+        });
+    }, []);
+
+    useEffect(() => {
         localStorage.setItem('formDataInLocal', JSON.stringify(formData));
     }, [formData])
 
@@ -184,7 +211,7 @@ const Form = () => {
                     {...group}
                 />
             ))}
-            <button onClick={() => handleUpdateGroups()}>Добавить группу</button>
+            <Button theme={ThemeButton.ADD} onClick={() => handleUpdateGroups()}>Добавить группу</Button>
         </div>
     );
 };

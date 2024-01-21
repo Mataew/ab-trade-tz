@@ -1,0 +1,18 @@
+.group {
+    & > button {
+        margin-left: 10px;
+    }
+}
+
+.group_header {
+    display: flex;
+    flex-direction: column;
+
+    & > .titles {
+        margin: 10px 0 10px 0;
+    }
+
+    & > input {
+        margin-bottom: 10px;
+    }
+}

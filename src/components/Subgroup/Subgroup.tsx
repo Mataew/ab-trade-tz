@@ -1,6 +1,7 @@
-import React from 'react';
 import Product from "../Product/Product";
 import {ISubGroup} from "../../interfaces/interfaces";
+import Button, {ThemeButton} from "../../Shared/Button/Button";
+import Input from "../../Shared/Input/Input";
 import './Subgroup.css';
 
 interface SubgroupProps extends ISubGroup {
@@ -24,26 +25,28 @@ const Subgroup: React.FC<SubgroupProps> = ({
     onDeleteProduct,
     onChange
 }) => {
+
     return (
         <div className='subgroup'>
-            <h4>Подгруппа {subGroupNumber}</h4>
-            <div>
-                <h4>Сумма подгруппы</h4>
-                <input value={sum}/>
-            </div>
-            <button style={{border: '1px solid red', background: 'red', color: 'white'}} onClick={() => onDeleteSubGroup(groupId, id)}>Удалить подгруппу</button>
-            {products.map((product, index) => (
+           <div className='subgroup_header'>
+               <div className='titles'>
+                   <h3>Подгруппа {subGroupNumber}</h3>
+                   <h5>Сумма подгруппы</h5>
+               </div>
+               <Input value={sum}/>
+               <Button theme={ThemeButton.DELETE} onClick={() => onDeleteSubGroup(groupId, id)}>Удалить подгруппу</Button>
+           </div>
+            {products.map((product) => (
                 <Product
                     key={product.id}
                     groupId={groupId}
                     subGroupId={id}
-                    productNumber={index + 1}
                     onDeleteProduct={onDeleteProduct}
                     onChange={onChange}
                     {...product}
                 />
             ))}
-            <button onClick={() => onUpdateProducts(groupId, id)}>Добавть продукт</button>
+            <Button theme={ThemeButton.ADD} onClick={() => onUpdateProducts(groupId, id)}>Добавть продукт</Button>
         </div>
     );
 };

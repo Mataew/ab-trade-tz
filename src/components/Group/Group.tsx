@@ -1,7 +1,9 @@
 import Subgroup from "../Subgroup/Subgroup";
 import {IGroup} from "../../interfaces/interfaces";
-import React, {FC} from "react";
+import {FC} from "react";
 import './Group.css';
+import Button, {ThemeButton} from "../../Shared/Button/Button";
+import Input from "../../Shared/Input/Input";
 
 interface GroupProps extends IGroup {
     groupNumber: number;
@@ -27,11 +29,13 @@ const GroupComponent: FC<GroupProps> = ({
 }) => {
     return (
         <div className='group'>
-            <h3>Группа {groupNumber}</h3>
-            <div>
-                <h3>Сумма группы</h3>
-                <input value={sum}/>
-                <button onClick={() => onDeleteGroup(id)}>delete</button>
+            <div className='group_header'>
+                <div className='titles'>
+                    <h3>Группа {groupNumber}</h3>
+                    <h5>Сумма группы:</h5>
+                </div>
+                <Input value={sum} />
+                <Button theme={ThemeButton.DELETE} onClick={() => onDeleteGroup(id)}>Удалить группу</Button>
             </div>
             {(subGroups || []).map((subgroup, index) => (
                 <Subgroup
@@ -45,7 +49,7 @@ const GroupComponent: FC<GroupProps> = ({
                     {...subgroup}
                 />
             ))}
-            <button onClick={() => onUpdateSubGroups(id)}>Добавить подгруппу</button>
+            <Button theme={ThemeButton.ADD} onClick={() => onUpdateSubGroups(id)}>Добавить подгруппу</Button>
         </div>
     );
 };

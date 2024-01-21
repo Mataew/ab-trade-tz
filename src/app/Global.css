@@ -13,7 +13,7 @@ select {
 }
 
 .App {
-  text-align: center;
   width: 1000px;
   margin: auto;
+  color: rgb(94 103 95);
 }

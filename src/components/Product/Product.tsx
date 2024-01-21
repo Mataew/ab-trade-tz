@@ -1,10 +1,10 @@
-import React from 'react';
 import {IProduct} from "../../interfaces/interfaces";
+import Input from "../../Shared/Input/Input";
+import Button, {ThemeButton} from "../../Shared/Button/Button";
 
 interface ProductProps extends IProduct {
     groupId: string | number;
     subGroupId: string | number;
-    productNumber: number;
     onDeleteProduct: (groupId: number | string, subGroupId: number | string, productId: number | string) => void;
     onChange: (groupId: number | string, subGroupId: number | string, productId: number | string, name: string, newValue: number | string) => void;
 }
@@ -17,7 +17,6 @@ const ProductComponent: React.FC<ProductProps> = ({
     price,
     groupId,
     subGroupId,
-    productNumber,
     onDeleteProduct,
     onChange
 }) => {
@@ -31,11 +30,11 @@ const ProductComponent: React.FC<ProductProps> = ({
                 <li></li>
             </ul>
             <ul>
-                <li><input onChange={(event) => onChange(groupId, subGroupId, id, event.target.name, event.target.value)} name='name' value={name + productNumber}/></li>
-                <li><input onChange={(event) => onChange(groupId, subGroupId, id, event.target.name, event.target.value)} name='price' value={price}/></li>
-                <li><input onChange={(event) => onChange(groupId, subGroupId, id, event.target.name, event.target.value)} name='count' value={count}/></li>
-                <li><input onChange={(event) => onChange(groupId, subGroupId, id, event.target.name, event.target.value)} name='sum' value={sum}/></li>
-                <li><button onClick={() => onDeleteProduct(groupId, subGroupId, id)}>Удалить</button></li>
+                <li><Input onChange={(event) => onChange(groupId, subGroupId, id, event.target.name, event.target.value)} name='name' value={name}/></li>
+                <li><Input onChange={(event) => onChange(groupId, subGroupId, id, event.target.name, event.target.value)} name='price' value={price}/></li>
+                <li><Input onChange={(event) => onChange(groupId, subGroupId, id, event.target.name, event.target.value)} name='count' value={count}/></li>
+                <li><Input onChange={(event) => onChange(groupId, subGroupId, id, event.target.name, event.target.value)} name='sum' value={sum}/></li>
+                <li><Button theme={ThemeButton.DELETE} onClick={() => onDeleteProduct(groupId, subGroupId, id)}>Удалить</Button></li>
             </ul>
         </div>
     );
